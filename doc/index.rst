@@ -43,6 +43,7 @@ Kolla Overview
    advanced-configuration
    operating-kolla
    security
+   liberty-deployment-warning
 
 Kolla Services
 ==============
@@ -66,4 +67,3 @@ Developer Docs
    CONTRIBUTING
    heat-dev-env
    vagrant-dev-env
-   running-tests

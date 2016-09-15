@@ -127,7 +127,7 @@ _CLI_OPTS = [
                      ' dependency in Graphviz dot format')),
     cfg.StrOpt('type', short='t', default='binary',
                choices=INSTALL_TYPE_CHOICES,
-               dest='install_type',
+               dest='install_type', deprecated_group='kolla-build',
                help=('The method of the OpenStack install')),
     cfg.IntOpt('threads', short='T', default=8, min=1,
                deprecated_group='kolla-build',
@@ -142,8 +142,6 @@ _CLI_OPTS = [
                 help=("Don't build images. Generate Dockerfile only")),
     cfg.IntOpt('timeout', default=120,
                help='Time in seconds after which any operation times out'),
-    cfg.StrOpt('template-override',
-               help='Path to template override file'),
 ]
 
 _BASE_OPTS = [
@@ -158,80 +156,75 @@ _BASE_OPTS = [
     cfg.StrOpt('apt_preferences', help=('Path to custom apt/preferences'))
 ]
 
-
 SOURCES = {
     'openstack-base': {
         'type': 'url',
         'location': ('https://github.com/openstack/requirements/tarball/'
-                     'master')},
+                     'stable/mitaka')},
     'aodh-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/aodh/'
-                     'aodh-master.tar.gz')},
+                     'aodh-2.0.0.tar.gz')},
     'ceilometer-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/ceilometer/'
-                     'ceilometer-master.tar.gz')},
+                     'ceilometer-6.0.0.tar.gz')},
     'cinder-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/cinder/'
-                     'cinder-master.tar.gz')},
+                     'cinder-8.0.0.tar.gz')},
     'designate-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/designate/'
-                     'designate-master.tar.gz')},
+                     'designate-2.0.0.tar.gz')},
     'glance-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/glance/'
-                     'glance-master.tar.gz')},
+                     'glance-12.0.0.tar.gz')},
     'gnocchi-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/gnocchi/'
-                     'gnocchi-master.tar.gz')},
+                     'gnocchi-2.1.0.tar.gz')},
     'heat-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/heat/'
-                     'heat-master.tar.gz')},
+                     'heat-6.0.0.tar.gz')},
     'horizon': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/horizon/'
-                     'horizon-master.tar.gz')},
+                     'horizon-9.0.0.tar.gz')},
     'ironic-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/ironic/'
-                     'ironic-master.tar.gz')},
+                     'ironic-5.1.0.tar.gz')},
     'keystone': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/keystone/'
-                     'keystone-master.tar.gz')},
+                     'keystone-9.0.0.tar.gz')},
     'magnum-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/magnum/'
-                     'magnum-master.tar.gz')},
+                     'magnum-2.0.0.tar.gz')},
     'manila-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/manila/'
-                     'manila-master.tar.gz')},
+                     'manila-2.0.0.tar.gz')},
     'mistral-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/mistral/'
-                     'mistral-master.tar.gz')},
+                     'mistral-2.0.0.tar.gz')},
     'murano-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/murano/'
-                     'murano-master.tar.gz')},
+                     'murano-2.0.0.tar.gz')},
     'neutron-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/neutron/'
-                     'neutron-master.tar.gz')},
-    'neutron-lbaas-agent': {
-        'type': 'url',
-        'location': ('http://tarballs.openstack.org/neutron-lbaas/'
-                     'neutron-lbaas-master.tar.gz')},
+                     'neutron-8.0.0.tar.gz')},
     'nova-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/nova/'
-                     'nova-master.tar.gz')},
+                     'nova-13.0.0.tar.gz')},
     'nova-spicehtml5proxy': {
         'type': 'url',
         'location': ('http://github.com/SPICE/spice-html5/tarball/'
@@ -240,32 +233,127 @@ SOURCES = {
         'type': 'url',
         'location': ('http://github.com/kanaka/noVNC/tarball/'
                      'v0.5.1')},
-    'rally': {
-        'type': 'url',
-        'location': ('http://tarballs.openstack.org/rally/'
-                     'rally-master.tar.gz')},
-    'sahara-base': {
-        'type': 'url',
-        'location': ('http://tarballs.openstack.org/sahara/'
-                     'sahara-master.tar.gz')},
     'swift-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/swift/'
-                     'swift-master.tar.gz')},
+                     'swift-2.7.0.tar.gz')},
     'tempest': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/tempest/'
-                     'tempest-master.tar.gz')},
+                     'tempest-10.0.0.tar.gz')},
     'trove-base': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/trove/'
-                     'trove-master.tar.gz')},
+                     'trove-5.0.0.tar.gz')},
     'zaqar': {
         'type': 'url',
         'location': ('http://tarballs.openstack.org/zaqar/'
-                     'zaqar-master.tar.gz')}
+                     'zaqar-2.0.0.tar.gz')}
+ }
 
-}
+#SOURCES = {
+#    'openstack-base': {
+#        'type': 'url',
+#        'location': ('https://github.com/openstack/requirements/tarball/'
+#                     'master')},
+#    'aodh-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/aodh/'
+#                     'aodh-master.tar.gz')},
+#    'ceilometer-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/ceilometer/'
+#                     'ceilometer-master.tar.gz')},
+#    'cinder-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/cinder/'
+#                     'cinder-master.tar.gz')},
+#    'designate-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/designate/'
+#                     'designate-master.tar.gz')},
+#    'glance-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/glance/'
+#                     'glance-master.tar.gz')},
+#    'gnocchi-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/gnocchi/'
+#                     'gnocchi-master.tar.gz')},
+#    'heat-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/heat/'
+#                     'heat-master.tar.gz')},
+#    'horizon': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/horizon/'
+#                     'horizon-master.tar.gz')},
+#    'ironic-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/ironic/'
+#                     'ironic-master.tar.gz')},
+#    'keystone': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/keystone/'
+#                     'keystone-master.tar.gz')},
+#    'magnum-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/magnum/'
+#                     'magnum-master.tar.gz')},
+#    'manila-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/manila/'
+#                     'manila-master.tar.gz')},
+#    'mistral-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/mistral/'
+#                     'mistral-master.tar.gz')},
+#    'murano-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/murano/'
+#                     'murano-master.tar.gz')},
+#    'neutron-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/neutron/'
+#                     'neutron-master.tar.gz')},
+#    'neutron-lbaas-agent': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/neutron-lbaas/'
+#                     'neutron-lbaas-master.tar.gz')},
+#    'nova-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/nova/'
+#                     'nova-master.tar.gz')},
+#    'nova-spicehtml5proxy': {
+#        'type': 'url',
+#        'location': ('http://github.com/SPICE/spice-html5/tarball/'
+#                     'spice-html5-0.1.6')},
+#    'nova-novncproxy': {
+#        'type': 'url',
+#        'location': ('http://github.com/kanaka/noVNC/tarball/'
+#                     'v0.5.1')},
+#    'sahara-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/sahara/'
+#                     'sahara-master.tar.gz')},
+#    'swift-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/swift/'
+#                     'swift-master.tar.gz')},
+#    'tempest': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/tempest/'
+#                     'tempest-master.tar.gz')},
+#    'trove-base': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/trove/'
+#                     'trove-master.tar.gz')},
+#    'zaqar': {
+#        'type': 'url',
+#        'location': ('http://tarballs.openstack.org/zaqar/'
+#                     'zaqar-master.tar.gz')}
+#
+#}
 
 
 def get_source_opts(type_=None, location=None, reference=None):

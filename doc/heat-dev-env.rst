@@ -100,17 +100,17 @@ And then create the stack, referencing that environment file:
 
 ::
 
-    $ openstack stack create -f kollacluster.yaml -e local.yaml kolla-cluster
+    $ heat stack-create -f kollacluster.yaml -e local.yaml kolla-cluster
 
 Access the Kolla Nodes
 ======================
 
 You can get the ip address of the Kolla nodes using the
-``openstack stack output show`` command:
+``heat output-show`` command:
 
 ::
 
-    $ openstack stack output show kolla-cluster kolla_node_external_ip
+    $ heat output-show kolla-cluster kolla_node_external_ip
     "192.168.200.86"
 
 You can ssh into that server as the ``fedora`` user:

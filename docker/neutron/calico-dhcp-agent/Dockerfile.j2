@@ -2,20 +2,16 @@ FROM {{ namespace }}/{{ image_prefix }}neutron-base:{{ tag }}
 MAINTAINER {{ maintainer }}
 
 {% if base_distro in ['ubuntu', 'debian'] %}
-        RUN echo "deb http://ppa.launchpad.net/project-calico/unstable/ubuntu trusty main " > /etc/apt/sources.list.d/calico.list  \
+        RUN echo "deb http://ppa.launchpad.net/project-calico/calico-1.4/ubuntu trusty main " > /etc/apt/sources.list.d/calico.list  \
             && echo "Package: *\nPin: release o=LP-PPA-project-calico-*\nPin-Priority: 1001\n" > /etc/apt/preferences \
-            && apt-get update \
-            && apt-get -y install --no-install-recommends \
-               wget \
-               libnettle4 \
-               libhogweed2
-
-RUN wget https://launchpad.net/~project-calico/+archive/ubuntu/unstable/+files/dnsmasq-base_2.72-2calico1.0.0+1_amd64.deb  \
-    && wget https://launchpad.net/~project-calico/+archive/ubuntu/unstable/+files/dnsmasq-utils_2.72-2calico1.0.0+1_amd64.deb \
-    && wget https://launchpad.net/~project-calico/+archive/ubuntu/unstable/+files/dnsmasq_2.72-2calico1.0.0+1_all.deb \
-    && dpkg -i --force-all *.deb
-
+            && apt-get update -y \
+            && apt-get install -y --no-install-recommends wget libnettle4 libhogweed2
 {% endif %}
+
+RUN wget http://ppa.launchpad.net/project-calico/calico-1.4/ubuntu/pool/main/d/dnsmasq/dnsmasq-base_2.72-2calico1.0.0+1_amd64.deb \
+    && wget http://ppa.launchpad.net/project-calico/calico-1.4/ubuntu/pool/main/d/dnsmasq/dnsmasq-utils_2.72-2calico1.0.0+1_amd64.deb \
+    && wget http://ppa.launchpad.net/project-calico/calico-1.4/ubuntu/pool/main/d/dnsmasq/dnsmasq_2.72-2calico1.0.0+1_all.deb \
+    && dpkg -i --force-all *.deb
 
 ADD plugins-archive /
 RUN   if [ "$(ls /plugins)" ]; then \

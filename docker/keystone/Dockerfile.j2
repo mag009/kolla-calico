@@ -21,6 +21,7 @@ RUN apt-get -y install --no-install-recommends \
         keystone \
         apache2 \
         libapache2-mod-wsgi \
+        python-ldappool \
     && apt-get clean
 
 RUN mkdir -p /var/www/cgi-bin/keystone \
@@ -43,6 +44,7 @@ RUN yum -y install \
 RUN apt-get -y install --no-install-recommends \
         apache2 \
         libapache2-mod-wsgi \
+        python-ldappool \
     && echo > /etc/apache2/ports.conf \
     && apt-get clean
 

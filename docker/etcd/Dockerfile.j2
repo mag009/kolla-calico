@@ -6,15 +6,12 @@ ENV FILE etcd-$VERSION-linux-amd64
 
 {% if base_distro in ['centos', 'fedora', 'oraclelinux', 'rhel'] %}
 
-RUN yum -y install \
-    curl \
+RUN yum -y install curl  \
     && yum clean all
 
 {% elif base_distro in ['ubuntu', 'debian'] %}
 
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-       curl \
+RUN apt-get update && apt-get install -y --no-install-recommends curl  \
     && apt-get clean
 
 {% endif %}

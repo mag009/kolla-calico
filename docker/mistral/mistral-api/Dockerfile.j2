@@ -8,12 +8,6 @@ RUN yum -y install \
         openstack-mistral-api \
     && yum clean all
 
-    {% elif base_distro in ['ubuntu'] %}
-
-RUN apt-get -y install --no-install-recommends \
-        mistral-api \
-    && apt-get clean
-
     {% endif %}
 {% endif %}
 

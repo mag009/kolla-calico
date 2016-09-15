@@ -105,17 +105,8 @@ write_configs
 ip l a fake_interface type dummy
 
 # Actually do the deployment
-tools/kolla-ansible -vvv prechecks
-# TODO(jeffrey4l): add pull action when we have a local registry
-# service in CI
 tools/kolla-ansible -vvv deploy
 tools/kolla-ansible -vvv post-deploy
 
 # Test OpenStack Environment
 sanity_check
-
-# TODO(jeffrey4l): make some configure file change and
-# trigger a real reconfigure
-tools/kolla-ansible -vvv reconfigure
-# TODO(jeffrey4l): need run a real upgrade
-tools/kolla-ansible -vvv upgrade

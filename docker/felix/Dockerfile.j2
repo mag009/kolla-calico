@@ -15,17 +15,17 @@ MAINTAINER {{ maintainer }}
 
     {% if install_type == 'binary' %}
 RUN apt-add-repository ppa:project-calico/unstable
-RUN apt-get -y install --no-install-recommends \
-        calico-felix \
+RUN apt-get install -y --no-install-recommends \
+    calico-felix \
     && apt-get clean
 
     {% elif install_type == 'source'  %}
 
 ADD plugins-archive /
-RUN apt-get -y install --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
     python-dev \
     gcc \
-    libffi-dev \
+	libffi-dev \
     libyajl-dev \
     ipset \
     iptables \

@@ -23,7 +23,7 @@ import testtools
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), '../tools')))
-from kolla.image import build
+from kolla.cmd import build
 
 LOG = logging.getLogger(__name__)
 
@@ -86,7 +86,8 @@ class BuildTestCentosSource(BuildTest, base.BaseTestCase):
 
 
 class BuildTestUbuntuBinary(BuildTest, base.BaseTestCase):
-    excluded_images = ["zaqar"]
+    excluded_images = ["mistral-base",
+                       "zaqar"]
 
     def setUp(self):
         super(BuildTestUbuntuBinary, self).setUp()
