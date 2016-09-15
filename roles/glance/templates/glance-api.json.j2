@@ -1,0 +1,18 @@
+{
+    "command": "glance-api",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/glance-api.conf",
+            "dest": "/etc/glance/glance-api.conf",
+            "owner": "glance",
+            "perm": "0600"
+        }{% if glance_enable_ceph | bool %},
+        {
+            "source": "{{ container_config_directory }}/ceph.*",
+            "dest": "/etc/ceph/",
+            "owner": "glance",
+            "perm": "0700"
+        }
+        {% endif %}
+    ]
+}

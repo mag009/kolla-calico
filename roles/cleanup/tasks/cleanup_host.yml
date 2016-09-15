@@ -1,0 +1,8 @@
+---
+- name: Cleaning host
+  command: /tmp/kolla-cleanup/tools/cleanup-host
+
+- name: Removing kolla-cleanup folder
+  file:
+    path: /tmp/kolla-cleanup
+    state: absent
