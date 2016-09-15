@@ -1,0 +1,22 @@
+FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['centos', 'fedora', 'oraclelinux', 'rhel'] %}
+
+RUN yum -y install \
+        scsi-target-utils \
+    && yum clean all
+
+RUN sed -i '1 i include /var/lib/cinder/volumes/*' /etc/tgt/tgtd.conf
+
+{% elif base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get -y install --no-install-recommends \
+        tgt \
+    && apt-get clean
+
+RUN sed -i '1 i include /var/lib/cinder/volumes/*' /etc/tgt/targets.conf
+
+{% endif %}
+
+{{ include_footer }}

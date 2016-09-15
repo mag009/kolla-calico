@@ -1,0 +1,34 @@
+FROM {{ namespace }}/{{ image_prefix }}openstack-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if install_type == 'binary' %}
+    {% if base_distro in ['centos', 'fedora', 'oraclelinux', 'rhel'] %}
+
+RUN yum -y install \
+        openstack-murano-common \
+    && yum clean all
+
+    {% elif base_distro in ['ubuntu'] %}
+
+RUN apt-get -y install --no-install-recommends \
+        murano-common \
+    && apt-get clean
+
+    {% endif %}
+{% elif install_type == 'source' %}
+
+ADD murano-base-archive /murano-base-source
+RUN ln -s murano-base-source/* murano \
+    && useradd --user-group murano \
+    && /var/lib/kolla/venv/bin/pip --no-cache-dir install --upgrade -c requirements/upper-constraints.txt /murano \
+    && mkdir -p /etc/murano /home/murano \
+    && cp -r /murano/etc/murano/* /etc/murano/ \
+    && chown -R murano: /etc/murano /home/murano
+
+{% endif %}
+
+COPY extend_start.sh /usr/local/bin/kolla_extend_start
+
+RUN usermod -a -G kolla murano \
+    && touch /usr/local/bin/kolla_murano_extend_start \
+    && chmod 755 /usr/local/bin/kolla_extend_start /usr/local/bin/kolla_murano_extend_start

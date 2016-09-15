@@ -1,0 +1,30 @@
+FROM {{ namespace }}/{{ image_prefix }}neutron-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if install_type == 'binary' %}
+    {% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get -y install --no-install-recommends \
+        neutron-l3-agent \
+    && apt-get clean
+
+    {% endif %}
+{% elif install_type == 'source' %}
+    {% if base_distro in ['centos', 'fedora', 'oraclelinux', 'rhel'] %}
+
+RUN yum -y install \
+        keepalived \
+    && yum clean all
+
+    {% elif base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get -y install --no-install-recommends \
+        keepalived \
+    && apt-get clean
+
+    {% endif %}
+{% endif %}
+
+{{ include_footer }}
+
+USER neutron

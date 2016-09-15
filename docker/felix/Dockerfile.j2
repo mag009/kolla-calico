@@ -1,0 +1,60 @@
+FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['centos', 'fedora', 'oraclelinux', 'rhel'] %}
+
+{% if install_type == 'binary' %}
+
+
+    {% elif install_type == 'sources'  %}
+
+{# Endif for base_distro centos #}
+{% endif %}
+
+{% elif base_distro in ['ubuntu', 'debian'] %}
+
+    {% if install_type == 'binary' %}
+RUN apt-add-repository ppa:project-calico/unstable
+RUN apt-get -y install --no-install-recommends \
+        calico-felix \
+    && apt-get clean
+
+    {% elif install_type == 'source'  %}
+
+ADD plugins-archive /
+RUN apt-get -y install --no-install-recommends \
+    python-dev \
+    gcc \
+    libffi-dev \
+    libyajl-dev \
+    ipset \
+    iptables \
+    uuid-runtime \
+    conntrack \
+    iputils-arping \
+    && apt-get clean
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python get-pip.py \
+    && rm get-pip.py
+
+RUN find /plugins
+RUN   if [ "$(ls /plugins)" ]; then \
+           pip --no-cache-dir install -c /plugins/felix-plugin-calico-archive-master/felix_requirements.txt /plugins/*; \
+       fi
+
+    {% endif %}
+
+{# Endif for base_distro ubuntu #}
+{% endif %}
+
+COPY felix_sudoers /etc/sudoers.d/felix_sudoers
+COPY extend_start.sh /usr/local/bin/kolla_extend_start
+RUN useradd --user-group felix \
+    && chmod 755 /usr/local/bin/kolla_extend_start \
+    && chmod 750 /etc/sudoers.d \
+    && chmod 440 /etc/sudoers.d/felix_sudoers \
+    && usermod -a -G kolla felix
+
+{{ include_footer }}
+
+USER root
